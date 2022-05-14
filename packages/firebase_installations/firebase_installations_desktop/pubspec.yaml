@@ -1,0 +1,47 @@
+name: firebase_installations_desktop
+description: Desktop implementation of firebase installations
+homepage: https://firebase.flutter.dev
+repository: https://github.com/invertase/flutterfire_dart
+version: 0.1.0-dev.0
+
+environment:
+  sdk: '>=2.12.0 <3.0.0'
+  flutter: '>=1.20.0'
+
+dependencies:
+  firebase_installations: ^16.3.6
+  firebase_installations_platform_interface: ^0.1.0
+  firebase_core: ^1.10.0
+  firebase_core_dart: ^1.0.0
+  firebase_core_desktop: ^1.0.0
+  firebase_installations_dart: ^0.1.0
+  flutter:
+    sdk: flutter
+  http: ^0.13.4
+  meta: ^1.3.0
+
+dev_dependencies:
+  firebase_core_platform_interface: ^4.1.0
+  flutter_test:
+    sdk: flutter
+  mockito: ^5.0.0
+  plugin_platform_interface: ^2.0.2
+
+flutter:
+  plugin:
+    implements: firebase_installations
+    platforms:
+      # TODO when doing development on macOS, uncomment this.
+      macos:
+        dartPluginClass: FirebaseFunctionsDesktop
+        pluginClass: none
+      linux:
+        dartPluginClass: FirebaseInstallationsDesktop
+        pluginClass: none
+      windows:
+        dartPluginClass: FirebaseInstallationsDesktop
+        pluginClass: none
+
+dependency_overrides:
+  firebase_installations_dart:
+    path: ../firebase_installations_dart
