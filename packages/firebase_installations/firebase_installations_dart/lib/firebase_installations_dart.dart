@@ -7,7 +7,10 @@
 ///
 library flutterfire_installations_dart;
 
+import 'dart:async';
+
 import 'package:firebase_core_dart/firebase_core_dart.dart';
+import 'package:firebaseapis/firebaseinstallations/v1.dart' as api;
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
@@ -43,29 +46,63 @@ class FirebaseInstallations {
   final FirebaseApp app;
 
   /// Http client used for making requests
-  http.Client _client = http.Client();
+  api.FirebaseinstallationsApi _client =
+      api.FirebaseinstallationsApi(http.Client());
 
   /// Sets the Http Client used for making request for testing
   @visibleForTesting
   // ignore: use_setters_to_change_properties
   void setApiClient(http.Client client) {
-    _client = client;
+    _client = api.FirebaseinstallationsApi(client);
   }
 
+  String? _installationId;
+
   /// Deletes the Firebase Installation and all associated data.
-  @override
-  Future<void> delete() async {}
+  Future<void> delete() async {
+    await _client.projects.installations.delete(
+      'projects/${app.options.projectId}/installations/$_installationId',
+    );
+  }
 
   /// Creates a Firebase Installation if there isn't one for the app and
   /// returns the Installation ID.
-  @override
-  Future<String> getId() {}
+  Future<String> getId() async {
+    if (_installationId == null) {
+      final result = await _client.projects.installations.create(
+        api.GoogleFirebaseInstallationsV1Installation(
+          appId: app.options.appId,
+          fid: 'fid',
+          sdkVersion: 'FIS_v2',
+        ),
+        'projects/${app.options.projectId}',
+      );
+      _installationId = result.fid;
+    }
+    if (_installationId != null) {
+      _idStream.add(_installationId!);
+    }
+    return _installationId!;
+  }
 
   /// Returns an Authentication Token for the current Firebase Installation.
-  @override
-  Future<String> getToken(bool forceRefresh) {}
+  Future<String> getToken(bool forceRefresh) async {
+    final result = await _client.projects.installations.authTokens.generate(
+      api.GoogleFirebaseInstallationsV1GenerateAuthTokenRequest(),
+      _installationId!,
+    );
+
+    return result.token!;
+  }
+
+  final _idStream = StreamController<String>.broadcast();
 
   /// Sends a new event via a [Stream] whenever the Installation ID changes.
-  @override
-  Stream<String> get onIdChange {}
+  Stream<String> get onIdChange {
+    final s = _idStream.stream;
+    if (_installationId != null) {
+      _idStream.add(_installationId!);
+    }
+    return s;
+  }
 }

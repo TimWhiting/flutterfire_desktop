@@ -56,26 +56,19 @@ class FirebaseInstallationsDesktop extends FirebaseInstallationsPlatform {
 
   /// Deletes the Firebase Installation and all associated data.
   @override
-  Future<void> delete() {
-    return dartInstallations.delete();
-  }
+  Future<void> delete() => dartInstallations.delete();
 
   /// Creates a Firebase Installation if there isn't one for the app and
   /// returns the Installation ID.
   @override
-  Future<String> getId() {
-    return dartInstallations.getId();
-  }
+  Future<String> getId() => dartInstallations.getId();
 
   /// Returns an Authentication Token for the current Firebase Installation.
   @override
-  Future<String> getToken(bool forceRefresh) {
-    return dartInstallations.getToken();
-  }
+  Future<String> getToken(bool forceRefresh) =>
+      dartInstallations.getToken(forceRefresh);
 
   /// Sends a new event via a [Stream] whenever the Installation ID changes.
   @override
-  Stream<String> get onIdChange {
-    return dartInstallations.onIdChange();
-  }
+  Stream<String> get onIdChange => dartInstallations.onIdChange;
 }
