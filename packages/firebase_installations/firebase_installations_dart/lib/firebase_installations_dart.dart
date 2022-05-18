@@ -13,8 +13,10 @@ import 'package:firebase_core_dart/firebase_core_dart.dart';
 import 'package:firebaseapis/firebaseinstallations/v1.dart' as api;
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
+import 'package:storagebox/storagebox.dart';
 
 part 'src/exceptions.dart';
+part 'src/storage.dart';
 
 /// A [FirebaseInstallations] instance that provides an interface
 /// for accessing the Firebase Installations API.
