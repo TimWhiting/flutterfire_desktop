@@ -141,9 +141,14 @@ void main() {
 
       test('Activate updates config', () async {
         expect(rc.getAll(), isEmpty);
+
+        rc.storage.setLastSuccessfulFetchResponse(
+          {'string_key': 'New', 'other_key': '1'},
+        );
         await rc.activate();
+
         expect(rc.getAll(), isNotEmpty);
-        expect(rc.getAll().length, equals(2));
+        expect(rc.getAll().length, 2);
         expect(
           rc.getAll().values.every((v) => v.source == ValueSource.valueRemote),
           true,
@@ -159,19 +164,14 @@ void main() {
         });
 
         expect(rc.getAll().length, 5);
-        expect(rc.getString('bar'), equals('bar'));
-        expect(rc.getString('foo'), equals('real foo'));
-        expect(rc.getString('string_key'), equals('default'));
+        expect(rc.getString('foo'), equals('new foo'));
+        expect(rc.getString('string_key'), equals('New'));
         expect(rc.getInt('number_key'), equals(42));
         expect(rc.getBool('bool_key'), equals(true));
-        expect(rc.getValue('foo').source, equals(ValueSource.valueRemote));
+        expect(rc.getValue('foo').source, equals(ValueSource.valueDefault));
         expect(
-          rc
-              .getAll()
-              .values
-              .where((v) => v.source == ValueSource.valueRemote)
-              .length,
-          equals(2),
+          rc.getValue('other_key').source,
+          equals(ValueSource.valueRemote),
         );
         expect(
           rc
@@ -180,6 +180,14 @@ void main() {
               .where((v) => v.source == ValueSource.valueDefault)
               .length,
           equals(3),
+        );
+        expect(
+          rc
+              .getAll()
+              .values
+              .where((v) => v.source == ValueSource.valueRemote)
+              .length,
+          equals(2),
         );
         rc.setDefaults({});
         expect(rc.getAll().length, 2);

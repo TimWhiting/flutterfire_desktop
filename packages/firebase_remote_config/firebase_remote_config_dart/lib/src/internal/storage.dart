@@ -12,7 +12,6 @@ class _RemoteConfigStorage {
       'last_successful_fetch_timestamp_millis';
   static const lastSuccessfulFetchKey = 'last_successful_fetch_response';
 
-  // TODO: Do we need these in storage?
   // static const activeConfigEtagKey = 'active_config_etag';
   // static const settingsKey = 'settings';
   // static const throttleMetadataKey = 'throttle_metadata';
