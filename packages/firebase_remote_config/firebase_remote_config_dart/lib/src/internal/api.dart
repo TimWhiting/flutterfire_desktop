@@ -2,10 +2,13 @@
 // Use of this source code is governed by a BSD-style license
 // that can be found in the LICENSE file.
 // ignore_for_file: public_member_api_docs, library_private_types_in_public_api
+import 'package:firebaseapis/firebaseremoteconfig/v1.dart' as api;
+import 'package:googleapis_auth/auth_io.dart';
+import 'package:meta/meta.dart';
 
-part of '../../firebase_remote_config_dart.dart';
+import 'storage.dart';
 
-@visibleForTesting
+@internal
 class RemoteConfigApiClient {
   RemoteConfigApiClient(
     this.projectId,
@@ -18,8 +21,8 @@ class RemoteConfigApiClient {
   late final httpClient = clientViaApiKey(apiKey);
   late final remoteConfigClient = api.FirebaseRemoteConfigApi(httpClient);
 
-  final _RemoteConfigStorage storage;
-  final _RemoteConfigStorageCache storageCache;
+  final RemoteConfigStorage storage;
+  final RemoteConfigStorageCache storageCache;
   final String projectId;
   final String appId;
   final String namespace;

@@ -4,6 +4,7 @@
 
 import 'package:firebase_core_dart/firebase_core_dart.dart';
 import 'package:firebase_remote_config_dart/firebase_remote_config_dart.dart';
+import 'package:firebase_remote_config_dart/src/internal/api.dart';
 import 'package:http/http.dart';
 import 'package:http/testing.dart';
 import 'package:storagebox/storagebox.dart';

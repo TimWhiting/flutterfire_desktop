@@ -1,7 +1,14 @@
-part of '../../firebase_remote_config_dart.dart';
+// ignore_for_file: public_member_api_docs
 
-class _RemoteConfigStorage {
-  _RemoteConfigStorage(this.appId, this.appName, this.namespace);
+import 'package:meta/meta.dart';
+import 'package:storagebox/storagebox.dart';
+
+import '../remote_config_status.dart';
+import '../remote_config_value.dart';
+
+@internal
+class RemoteConfigStorage {
+  RemoteConfigStorage(this.appId, this.appName, this.namespace);
   final String appId;
   final String appName;
   final String namespace;
@@ -76,9 +83,10 @@ class _RemoteConfigStorage {
 }
 
 /// A memory cache layer over storage to support the SDK's synchronous read requirements.
-class _RemoteConfigStorageCache {
-  _RemoteConfigStorageCache(_RemoteConfigStorage storage) : _storage = storage;
-  final _RemoteConfigStorage _storage;
+@internal
+class RemoteConfigStorageCache {
+  RemoteConfigStorageCache(RemoteConfigStorage storage) : _storage = storage;
+  final RemoteConfigStorage _storage;
 
   /// Memory caches.
 
@@ -139,11 +147,13 @@ class _RemoteConfigStorageCache {
   }
 }
 
-extension _MapNullable<T> on T? {
+@internal
+extension MapNullable<T extends Object> on T? {
   S? mapNullable<S>(S? Function(T) f) {
-    if (this == null) {
+    final v = this;
+    if (v == null) {
       return null;
     }
-    return f(this as T);
+    return f(v);
   }
 }

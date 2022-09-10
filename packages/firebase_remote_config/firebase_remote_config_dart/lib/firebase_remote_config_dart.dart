@@ -7,11 +7,11 @@ library firebase_remote_config_dart;
 import 'dart:async';
 
 import 'package:firebase_core_dart/firebase_core_dart.dart';
-import 'package:firebaseapis/firebaseremoteconfig/v1.dart' as api;
-import 'package:googleapis_auth/auth_io.dart';
-import 'package:meta/meta.dart';
-import 'package:storagebox/storagebox.dart';
 
+import 'package:meta/meta.dart';
+
+import 'src/internal/api.dart';
+import 'src/internal/storage.dart';
 import 'src/remote_config_settings.dart';
 import 'src/remote_config_status.dart';
 import 'src/remote_config_value.dart';
@@ -19,9 +19,6 @@ import 'src/remote_config_value.dart';
 export 'src/remote_config_settings.dart';
 export 'src/remote_config_status.dart';
 export 'src/remote_config_value.dart';
-
-part 'src/internal/api.dart';
-part 'src/internal/storage.dart';
 
 /// The entry point for accessing Remote Config.
 ///
@@ -34,7 +31,7 @@ class FirebaseRemoteConfig {
   FirebaseRemoteConfig({
     required this.app,
     this.namespace = 'firebase',
-  }) : storage = _RemoteConfigStorage(app.options.appId, app.name, namespace);
+  }) : storage = RemoteConfigStorage(app.options.appId, app.name, namespace);
 
   // Cached instances of [FirebaseRemoteConfig].
   static final Map<String, Map<String, FirebaseRemoteConfig>>
@@ -65,12 +62,12 @@ class FirebaseRemoteConfig {
   }
 
   @visibleForTesting
-  // ignore: library_private_types_in_public_api, public_member_api_docs
-  late final _RemoteConfigStorageCache storageCache =
-      _RemoteConfigStorageCache(storage);
+  // ignore: public_member_api_docs
+  late final RemoteConfigStorageCache storageCache =
+      RemoteConfigStorageCache(storage);
   @visibleForTesting
-  // ignore: library_private_types_in_public_api, public_member_api_docs
-  final _RemoteConfigStorage storage;
+  // ignore: public_member_api_docs
+  final RemoteConfigStorage storage;
 
   /// The namespace of the remote config instance
   final String namespace;
@@ -196,7 +193,7 @@ class FirebaseRemoteConfig {
     );
     return storage.activeConfig?[key] ??
         RemoteConfigValue(
-          _defaultConfig[key].mapNullable((v) => '$v'),
+          _defaultConfig[key]?.mapNullable((v) => '$v'),
           ValueSource.valueDefault,
         );
   }
